@@ -1,0 +1,97 @@
+[
+    
+    {
+        "history": [],
+        "username": "sexydrew",
+        "auth": {
+            "facebook": {
+                "id": "1164550906895066",
+                "token": "CAAWNqaE3QVgBAMQ9mw2ECUv9QW94QIxzN2R5ldqExw7bXa5PRZBTcJRhhRgSZAg3F69CBnwksZBPZBCMRn9UlUeAs3l4ntUSSk0JZB6OeLYNpruFPBVGMVbgqKSkI5EMe5V8HNVr0hxzQhAoiKlwt2xllkEpky4Lk3QyN8eOkpFZCXroEGhjIxVcdVuOxcz96XPacWaFva9VNXafbEZAZCq6jhJ0yZCWxZBUsHXKU2553xwyTGQAzyrVvz"
+            },
+            "local": {
+                "email": "null@null.com",
+                "password": "null"
+            }
+        },
+        "profile": {
+            "avatar": "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpt1/v/t1.0-1/p200x200/11390295_1151666418183515_5682322587882156465_n.jpg?oh=e232facf3682a83234a93319bf848a9a&oe=565009D1&__gda__=1447642394_c9f4472b9bdd5d6a806b80143c8238b4",
+            "firstName": "Andrew",
+            "lastName": "Aquino"
+        },
+        "score": 1000,
+        "devices": [
+            {
+                "hardware": "iPhone6Plus",
+                "os": "iOS",
+                "version": "8.4",
+                "token": "ff6ac222b68c17e9ea3289885f7230f2c5b002006584138dbf17c184d33ecc8c",
+                "active": true
+            }
+        ],
+        "notifications": {
+            "channels": ["Beta"],
+            "active": true
+        }
+    },
+    {
+        "username": "hello",
+        "auth": {
+            "facebook": {
+                "id": "abc1234",
+                "token": "blahblah"
+            }
+        },
+        "score": 2500,
+        "devices": [
+            {
+                "hardware": "iPhone6Plus",
+                "os": "iOS",
+                "version": "8.4",
+                "token": "abc",
+                "active": true
+            },
+            {
+                "hardware": "iPad3",
+                "os": "iOS",
+                "version": "8.4",
+                "token": "xyz",
+                "active": true
+            }
+        ],
+        "notifications": {
+            "channels": ["test2"],
+            "active": true
+        }
+    },
+    {
+        "username": "world",
+        "status": "inactive",
+        "auth": {
+            "facebook": {
+                "id": "541231fdsjfds",
+                "token": "anothertoken"
+            }
+        },
+        "score": 300,
+        "devices": [
+            {
+                "hardware": "iPhone5",
+                "os": "iOS",
+                "version": "8.2",
+                "token": "efg",
+                "active": false
+            },
+            {
+                "hardware": "iPhone5",
+                "os": "iOS",
+                "version": "8.2",
+                "token": "abc",
+                "active": true
+            }
+        ],
+        "notifications": {
+            "channels": ["test1", "test2"],
+            "active": false
+        }
+    }
+]
