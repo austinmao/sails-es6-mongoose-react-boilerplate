@@ -14,6 +14,7 @@ import util from 'util'
 import humps from 'humps' // camel case nested object keys
 import flatten from 'flat' // flatten nested object
 import _s from 'underscore.string'
+import Downloader from 'download'
 
 // color consoles
 import chalk from 'chalk'
@@ -571,3 +572,41 @@ export class Generate {
   }
 } // Generate
 
+
+export class Download {
+
+  /**
+   * @param  {string}   dest - destination to save file
+   * @param  {[string]} urls - urls of files to download
+   */
+  constructor(dest, urls) {
+
+    this.dest = dest
+    this.urls = is.array(urls) ? urls : [urls]
+    this.download = new Downloader()
+
+    // set up downloader for each url
+    for (const url of this.urls) {
+      this.download = this.download.get(url)
+    }
+  }
+
+
+  /**
+   * run downloader on files
+   * @return {promise} - files that finished downloading
+   */
+  process() {
+
+    const thiz = this
+
+    return new Promise(function(resolve, reject) {
+      return thiz.download
+        .dest(thiz.dest)
+        .run((err, files) => {
+          if (err) return reject(err)
+          return resolve(files)
+        })
+    })
+  }
+}
