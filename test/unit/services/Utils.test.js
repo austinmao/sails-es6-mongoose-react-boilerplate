@@ -633,8 +633,8 @@ describe('Utils Service', () => {
       })
     })
 
-    // describe('.process', () => {
-    describe.only('.process', () => {
+    describe('.process', () => {
+    // describe.only('.process', () => {
 
       let parsedUrl
       let fileName

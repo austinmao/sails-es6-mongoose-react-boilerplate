@@ -290,11 +290,24 @@ export class Find {
 }
 
 
-export class Populate extends Find {
+// export class Populate extends Find {
 
-  constructor(model, filters) {
-    super(model, filters)
-  }
+//   constructor(model, filters) {
+//     super(model, filters)
+//   }
 
+//   createOrUpdate(object) {
 
-}
+//     let query = this.constructQuery(this.filters)
+
+//     log.trace('going to removeAsync with', query)
+//     return this.model.mongoose.findAsync(query)
+//       .tap(result => log.success(fn, 'success with count:', result.length))
+
+//       .catch(err => {
+//         sails.log.error(fn, 'error', err)
+//         // TODO: should this be Promise.OperationalError?
+//         throw new Promise.OperationalError(err)
+//       })
+//     }
+// }
