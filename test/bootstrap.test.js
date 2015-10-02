@@ -54,11 +54,6 @@ before(function (done) {
 
     var fixtures = [
       {
-        model: Place,
-        name: 'place',
-        data: require('./fixtures/place.json')
-      },
-      {
         model: User,
         name: 'user',
         data: require('./fixtures/user.json')

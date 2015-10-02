@@ -65,17 +65,17 @@ module.exports.connections = {
 
   mongo: {
     adapter: 'sails-mongo',
-    url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/fomo'
+    url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/sails'
   },
 
   test: {
     adapter: 'sails-mongo',
-    url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/fomo-test'
+    url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/sails-test'
   },
 
   functional: {
     adapter: 'sails-mongo',
-    url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/fomo-functional'
+    url: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/sails-functional'
   },
 
 

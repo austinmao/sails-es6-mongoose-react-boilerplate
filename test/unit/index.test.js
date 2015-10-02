@@ -7,6 +7,7 @@ import is from 'is_js'
 import Promise from 'bluebird'
 import request from 'supertest-as-promised'
 const ObjectId = require('mongodb').ObjectID
+import {Clean} from '../helpers/clean'
 
 // color consoles
 import chalk from 'chalk'
@@ -30,10 +31,12 @@ describe('Unit Tests', () => {
     });
 
     it('global models available', () => {
-      User.should.exist
+      // User.should.exist
     })
   })
 
+
+  /*
   describe('#databases', () => {
 
     let user
@@ -56,13 +59,18 @@ describe('Unit Tests', () => {
         })
         .catch(done)
     })
-
-    it('should load homepage', done => {
-      request(app)
-        .get('/')
-        .expect(200, done)
-    })
   });
+  */
+
+
+  describe('#http', () => {
+
+    // it('should load homepage', done => {
+    //   request(app)
+    //     .get('/')
+    //     .expect(200, done)
+    // })
+  })
 
   describe('#helpers', () => {
 
