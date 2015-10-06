@@ -16,6 +16,7 @@ Promise.promisifyAll(fse)
 import faker from 'faker'
 import $url from 'url'
 import path from 'path'
+import util from 'util'
 import {Fake} from '../../helpers/fake'
 import {Validate, Retrieve, Convert, Generate} from '../../../api/services/Utils'
 const fake = new Fake()
@@ -609,6 +610,86 @@ describe('Utils Service', () => {
         result[1].x.should.equal(4)
         result[1].y.should.equal(5)
         result[1].z.should.equal(6)
+      })
+    })
+
+    describe('.cartesianProduct', () => {
+      it('should generate 2 permutations for 2 variations', () => {
+        obj = [
+          [1,2],
+          ['a','b']
+        ]
+
+        generate = new Generate()
+        result = generate.cartesianProduct(obj)
+        result.should.be.instanceOf(Array)
+        result.should.have.length(4)
+      }) // it
+    })
+
+    describe('.permutationsOfObjectByValuesInKey', () => {
+      it('should return error if key is not an array', () => {
+        obj = {
+          a: [1, 2],
+          b: 'c'
+        }
+
+        generate = new Generate()
+        result = generate.permutationsOfObjectByValuesInKey(obj, 'b')
+        result.should.be.an.error
+      })
+
+      it('should generate 2 permutations for 2 variations', () => {
+        obj = {
+          a: [1, 2],
+          b: 'c'
+        }
+
+        generate = new Generate()
+        result = generate.permutationsOfObjectByValuesInKey(obj, 'a')
+        result.should.be.instanceOf(Array)
+        result.should.have.length(2)
+      })
+    })
+
+    describe.only('.permutationsOfObjectByKeyValueVariations', () => {
+      it('should produce array of objects with permutations', () => {
+        obj = {
+          a: [1, 2],
+          b: ['z', 'x']
+        }
+
+        generate = new Generate()
+        result = generate.permutationsOfObjectByKeyValueVariations(obj, ['a', 'b'])
+        result.should.be.instanceOf(Array)
+        result.should.have.length(4)
+
+        for (const res of result) {
+          res.should.have.property('a')
+          res.should.have.property('b')
+          res.a.should.be.instanceOf(Number)
+          res.b.should.be.instanceOf(String)
+        }
+      })
+
+      it('should produce array of objects with permutations with only the specified key value pairs combined', () => {
+        obj = {
+          a: [1, 2],
+          b: ['z', 'x'],
+          c: 'hello'
+        }
+
+        generate = new Generate()
+        result = generate.permutationsOfObjectByKeyValueVariations(obj, ['a', 'b'])
+        result.should.be.instanceOf(Array)
+        result.should.have.length(4)
+
+        for (const res of result) {
+          res.should.have.property('a')
+          res.should.have.property('b')
+          res.a.should.be.instanceOf(Number)
+          res.b.should.be.instanceOf(String)
+        }
       })
     })
   })  

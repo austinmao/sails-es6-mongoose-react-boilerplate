@@ -570,6 +570,94 @@ export class Generate {
 
     return remappedArray
   }
+
+
+  /**
+   * generate cartesian product from unique arguments
+   * @return {[[object]]} returns array of arrays
+   */
+  cartesianProduct(obj) {
+    return _.reduce(obj, function(a, b) {
+      return _.flatten(_.map(a, function(x) {
+        return _.map(b, function(y) {
+          return x.concat([y]);
+        });
+      }), false);
+    }, [ [] ]);
+  }
+
+
+  /**
+   * generate array of permutations of an object by one key of the object
+   * @param  {object} obj - object with keys to find permutations of
+   * @param  {string} key - string of object to find permutations
+   * @return {[]}         - array of permutations of the type of obj[key]
+   */
+  permutationsOfObjectByValuesInKey(obj, key) {
+    let perms = [] // permutations to return
+    let perm       // each permutation
+    const variations = _.get(obj, key)
+
+    if (is.not.array(variations)) return new Error('key is not an array')
+
+    // clone obj for permutation then set the value at key
+    for (const val of variations) {
+      // clone permutation so obj is not mutated
+      perm = _.cloneDeep(obj)
+      // set value at key of permutation
+      _.set(perm, key, val)
+      perms.push(perm)
+    }
+
+    return perms
+  }
+
+
+  /**
+   * generate cartesian product of permutations of object by varying keys
+   * @param  {object} obj - obj with keys with varying values
+   * @return {[type]}     [description]
+   */
+  permutationsOfObjectByKeyValueVariations(obj, keys) {
+    let perm
+    let perms = []
+    let permOfPerms = []
+
+    // ensure keys are in array
+    if (is.not.array(keys)) {
+      if (is.string(keys)) keys = [keys]
+      else return new Error('keys needs to be in an array')
+    }
+
+    // create array of objects with one key value pair
+    for (const key of keys) {
+      // get cartesian product of key value pairs
+      perm = this.permutationsOfObjectByValuesInKey(_.pick(obj, key), key)
+      if (is.error(perm)) return perm
+
+      perms.push(perm)
+    }
+
+    // produce array of permutations of objects containing one key value pair
+    const cartesianProducts = this.cartesianProduct(perms)
+
+    // merge key value pairs into clone of original obj
+    let objClone
+    for (const cartesianProduct of cartesianProducts) {
+      // clone obj to create new permutation object
+      objClone = _.cloneDeep(obj)
+
+      // merge permutation field into clone for each keyValue pair
+      for (const keyValuePair of cartesianProduct) {
+        _.merge(objClone, keyValuePair)
+      }
+
+      permOfPerms.push(objClone)
+    }
+
+    sails.log.info('found permutations:', permOfPerms)
+    return permOfPerms
+  }
 } // Generate
 
 
