@@ -10,8 +10,10 @@ var Barrels = require('barrels')
 var clear = require('cli-clear')
 var Promise = require('bluebird')
 var sails
-// var barrels
-// var fixtures // fake json data
+var glob = Promise.promisify(require('glob'))
+var path = require('path')
+var _s = require('underscore.string')
+var changeCase = require('change-case')
 
 // add babel to global var
 global.babel = require("sails-hook-babel/node_modules/babel/register")();
@@ -26,16 +28,7 @@ before(function (done) {
   // this.timeout(12000)
 
   // Lift Sails with test database
-  Sails.lift({
-    // log: { level: 'silent' },
-    // log: { level: 'info' }
-    // log: { level: 'warn' },
-    // models: {
-    //   connection: 'mongo',
-    //   // connection: 'test',
-    //   migrate: 'drop'
-    // }
-  }, function(err, server) {
+  Sails.lift({}, function(err, server) {
 
     if (err) {
       console.error('failed to lift sails')
@@ -49,62 +42,54 @@ before(function (done) {
     global.sails = sails
     global.app = sails.express ? sails.express.app : sails.hooks.http.app;
 
-    // populate fixtures
+    /************************
+    *** populate fixtures ***
+    ************************/
     global.fixtures = {}
 
-    var fixtures = [
-      {
-        model: User,
-        name: 'user',
-        data: require('./fixtures/user.json')
-      }
-    ]
+    // get fixture files
+    return glob('./test/fixtures/*.json')
 
-    // populate each fixture
-    Promise.map(fixtures, function(fixture) {
-      _Populate(fixture.model, fixture.data)
-        .then(function(result) {
-          global.fixtures[fixture.name] = result
+      // populate each model with fixtures
+      .then(function(files) {
+
+        var fixtures = []
+
+        _.each(files, function(file) {
+
+          // get name to find model
+          var basename = path.basename(file, '.json');
+
+          // remove 'test/' from file
+          file = _s.splice(file, 2, 5)
+
+          fixtures.push({
+            basename,
+            model: changeCase.lowerCase(basename),
+            path: require(file) // get file contents
+          })
         })
-    })
-      .then(function(result) {
-        clear() // clear terminal again
-        done(null, sails)
+
+        // get each model
+        return Promise.map(fixtures, function(fixture) {
+          // get each record
+          return Promise.map(fixture.path, function(record) {
+            // create a record for each model
+            return sails.models[fixture.model].mongoose.createAsync(record)
+          })
+            .tap(records => {
+              global.fixtures[fixture.basename] = records
+            })
+        })
+          .then(function(result) {
+            clear() // clear terminal again
+            done(null, sails)
+          })
+          .catch(err => {
+            sails.log.error(err)
+            done(err)
+          })
       })
-      .catch(done)
-
-
-    /**
-     * populate model with fixtures
-     * @param  {object}   model    - model to populate
-     * @param  {object[]} fixtures - data to populate
-     * @return {promise}             fulfilled promise with success or error
-     */
-    function _Populate(model, fixtures) {
-
-      // populate each fixture to the db through mongoose create
-      return Promise.map(fixtures, function(fixture) {
-        return model.mongoose.createAsync(fixture)
-          .catch(sails.log.error)
-      })
-        .catch(sails.log.error)
-    }
-
-    /*
-    // instantiate fixtures creator
-    barrels = new Barrels()
-
-    // save original objects in `fixtures` variable
-    global.fixtures = barrels.data
-
-    // populate fixtures
-    barrels.populate(function(err) {
-      sails.log.verbose('successfully lifted sails')
-      done(err, sails);
-    })
-    
-    done(err, sails);
-    */
   });
 });
 
