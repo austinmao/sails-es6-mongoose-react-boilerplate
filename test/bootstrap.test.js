@@ -46,14 +46,13 @@ before(function (done) {
     *** populate fixtures ***
     ************************/
     global.fixtures = {}
+    var fixtures = []
 
     // get fixture files
     return glob('./test/fixtures/*.json')
 
       // populate each model with fixtures
       .then(function(files) {
-
-        var fixtures = []
 
         _.each(files, function(file) {
 
@@ -77,18 +76,26 @@ before(function (done) {
             // create a record for each model
             return sails.models[fixture.model].mongoose.createAsync(record)
           })
-            .tap(records => {
+        })
+      })
+
+      // find all records and set them to global.fixtures
+      .then(function() {
+        return Promise.map(fixtures, function(fixture) {
+          return sails.models[fixture.model].mongoose.findAsync()
+            .then(function(records) {
               global.fixtures[fixture.basename] = records
             })
         })
-          .then(function(result) {
-            clear() // clear terminal again
-            done(null, sails)
-          })
-          .catch(err => {
-            sails.log.error(err)
-            done(err)
-          })
+      })
+      
+      .then(function(result) {
+        clear() // clear terminal again
+        done(null, sails)
+      })
+      .catch(err => {
+        sails.log.error(err)
+        done(err)
       })
   });
 });

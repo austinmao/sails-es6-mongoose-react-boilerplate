@@ -652,7 +652,7 @@ describe('Utils Service', () => {
       })
     })
 
-    describe.only('.permutationsOfObjectByKeyValueVariations', () => {
+    describe('.permutationsOfObjectByKeyValueVariations', () => {
       it('should produce array of objects with permutations', () => {
         obj = {
           a: [1, 2],
