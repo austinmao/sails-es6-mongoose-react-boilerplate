@@ -65,11 +65,11 @@ describe('Unit Tests', () => {
 
   describe('#http', () => {
 
-    // it('should load homepage', done => {
-    //   request(app)
-    //     .get('/')
-    //     .expect(200, done)
-    // })
+    it('should load homepage', done => {
+      request(app)
+        .get('/')
+        .expect(200, done)
+    })
   })
 
   describe('#helpers', () => {
