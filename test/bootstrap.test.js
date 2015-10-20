@@ -64,7 +64,7 @@ before(function (done) {
           file = _s.splice(file, 2, 5)
 
           fixtures.push({
-            basename,
+            basename: basename,
             model: changeCase.lowerCase(basename),
             path: require(file) // get file contents
           })
