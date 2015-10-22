@@ -33,15 +33,20 @@ describe('Unit Tests', () => {
     it('global models available', () => {
       User.should.exist
     })
-
-    it('should have records in global fixtures', () => {
-      fixtures.user.should.be.instanceOf(Array)
-    })
   })
 
 
   describe('#fixtures', () => {
 
+    it('should have records in global fixtures', () => {
+      fixtures.user.should.be.instanceOf(Array)
+    })
+
+    it('should have references in global fixtures', () => {
+      for (const _auth of fixtures.auth) {
+        _auth.should.have.property('_user')
+      }
+    })
   })
 
 

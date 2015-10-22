@@ -50,28 +50,27 @@ before(function (done) {
     var fixtures = require('./fixtures/data.js')
     // set models to map
     var models   = _.keys(require('./fixtures/data.js'))
-    // make models lowercase
-    models       = _.map(models, changeCase.lowercase)
 
     // get each model
     return Promise.map(models, function(model) {
       // get each record
       return Promise.map(fixtures[model], function(fixture) {
         // create a record for each model
-        return sails.models[model].mongoose.createAsync(fixture)
+        return sails.models[model.toLowerCase()].mongoose.createAsync(fixture)
       })
     })
 
       // find and to global.fixtures
       .then(function() {
         return Promise.map(models, function(model) {
-          return sails.models[model].mongoose.findAsync()
+          // find records for each created model
+          return sails.models[model.toLowerCase()].mongoose.findAsync()
             .tap(function(records) {
               global.fixtures[model] = records
             })
         })
       })
-      .tap(() => sails.log(global.fixtures))
+      // .tap(() => sails.log(global.fixtures))
       
       .then(function(result) {
         clear() // clear terminal again
