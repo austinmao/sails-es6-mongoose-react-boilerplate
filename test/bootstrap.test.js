@@ -46,48 +46,32 @@ before(function (done) {
     *** populate fixtures ***
     ************************/
     global.fixtures = {}
-    var fixtures = []
+    // load fixture data
+    var fixtures = require('./fixtures/data.js')
+    // set models to map
+    var models   = _.keys(require('./fixtures/data.js'))
+    // make models lowercase
+    models       = _.map(models, changeCase.lowercase)
 
-    // get fixture files
-    return glob('./test/fixtures/*.json')
-
-      // populate each model with fixtures
-      .then(function(files) {
-
-        _.each(files, function(file) {
-
-          // get name to find model
-          var basename = path.basename(file, '.json');
-
-          // remove 'test/' from file
-          file = _s.splice(file, 2, 5)
-
-          fixtures.push({
-            basename: basename,
-            model: changeCase.lowerCase(basename),
-            path: require(file) // get file contents
-          })
-        })
-
-        // get each model
-        return Promise.map(fixtures, function(fixture) {
-          // get each record
-          return Promise.map(fixture.path, function(record) {
-            // create a record for each model
-            return sails.models[fixture.model].mongoose.createAsync(record)
-          })
-        })
+    // get each model
+    return Promise.map(models, function(model) {
+      // get each record
+      return Promise.map(fixtures[model], function(fixture) {
+        // create a record for each model
+        return sails.models[model].mongoose.createAsync(fixture)
       })
+    })
 
-      // find all records and set them to global.fixtures
+      // find and to global.fixtures
       .then(function() {
-        return Promise.map(fixtures, function(fixture) {
-          return sails.models[fixture.model].mongoose.findAsync()
-            .then(function(records) {
-              global.fixtures[fixture.basename] = records
+        return Promise.map(models, function(model) {
+          return sails.models[model].mongoose.findAsync()
+            .tap(function(records) {
+              global.fixtures[model] = records
             })
         })
       })
+      .tap(() => sails.log(global.fixtures))
       
       .then(function(result) {
         clear() // clear terminal again

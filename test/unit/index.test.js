@@ -35,8 +35,13 @@ describe('Unit Tests', () => {
     })
 
     it('should have records in global fixtures', () => {
-      fixtures.User.should.be.instanceOf(Array)
+      fixtures.user.should.be.instanceOf(Array)
     })
+  })
+
+
+  describe('#fixtures', () => {
+
   })
 
 
@@ -91,7 +96,7 @@ describe('Unit Tests', () => {
       it('should count records in db', done => {
         clean.countRecords()
           .then(records => {
-            records.should.be.eql(fixtures['User'].length);
+            records.should.be.eql(fixtures['user'].length);
             done()
           })
           .catch(done)
@@ -100,7 +105,7 @@ describe('Unit Tests', () => {
       it('should save records to preserve', done => {
         clean.preserveRecords()
           .then(records => {
-            records.length.should.be.eql(fixtures['User'].length);
+            records.length.should.be.eql(fixtures['user'].length);
             done()
           })
           .catch(done)
