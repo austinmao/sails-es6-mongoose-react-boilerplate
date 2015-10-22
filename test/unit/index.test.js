@@ -47,6 +47,12 @@ describe('Unit Tests', () => {
         _auth.should.have.property('_user')
       }
     })
+
+    it('should have __label when unit testing', () => {
+      for (const _user of fixtures.user) {
+        _user.should.have.property('__label')
+      }
+    })
   })
 
 

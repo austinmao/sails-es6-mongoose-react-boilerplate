@@ -3,12 +3,14 @@ var ObjectID = require('mongodb').ObjectID
 // set var to reference _id from other schemas
 var user = exports.user = [
   {
+    __label: 'user1',
     _id: ObjectID(),
     firstName: "Hello",
     lastName: "World",
     email: "hello@world.com"
   },
   {
+    __label: 'user2',
     _id: ObjectID(),
     firstName: "Foo",
     lastName: "Bar",

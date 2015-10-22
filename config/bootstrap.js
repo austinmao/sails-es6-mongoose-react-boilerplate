@@ -99,6 +99,9 @@ module.exports.bootstrap = function (cb) {
           // get mongoose schema
           var schema = Model.schema
 
+          // add __label to mongoose models if in unit testing mode
+          schema.add({ __label: String })
+
           // if no schema, move to the next model
           if (!schema) return
 
