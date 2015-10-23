@@ -60,7 +60,7 @@ before(function (done) {
 
         // create a record for each discriminator
         if (fixture.__discriminator) {
-          return sails.models[model.toLowerCase()].mongoose[fixture.__discriminator].createAsync(fixtures)
+          return sails.models[model.toLowerCase()].mongoose[fixture.__discriminator].createAsync(fixture)
 
             // add fixture to global.FixtureDiscriminator
             .tap(function(record) {
