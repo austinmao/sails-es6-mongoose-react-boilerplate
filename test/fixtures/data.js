@@ -4,6 +4,7 @@ var ObjectID = require('mongodb').ObjectID
 var user = exports.user = [
   {
     __label: 'user1',
+    __discriminator: 'Facebook',
     _id: ObjectID(),
     firstName: "Hello",
     lastName: "World",
@@ -11,6 +12,7 @@ var user = exports.user = [
   },
   {
     __label: 'user2',
+    __discriminator: 'Twitter',
     _id: ObjectID(),
     firstName: "Foo",
     lastName: "Bar",

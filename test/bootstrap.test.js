@@ -14,6 +14,7 @@ var glob = Promise.promisify(require('glob'))
 var path = require('path')
 var _s = require('underscore.string')
 var changeCase = require('change-case')
+var is = require('is_js')
 
 // add babel to global var
 global.babel = require("sails-hook-babel/node_modules/babel/register")();
@@ -53,25 +54,34 @@ before(function (done) {
 
     // get each model
     return Promise.map(models, function(model) {
+
       // get each record
       return Promise.map(fixtures[model], function(fixture) {
+
+        // create a record for each discriminator
+        if (fixture.__discriminator) {
+          return sails.models[model.toLowerCase()].mongoose[fixture.__discriminator].createAsync(fixtures)
+
+            // add fixture to global.FixtureDiscriminator
+            .tap(function(record) {
+              var discFixture = model + fixture.__discriminator
+              if (is.not.array(global.fixtures[discFixture])) {
+                global.fixtures[discFixture] = []
+              }
+              global.fixtures[discFixture].push(record)
+            })
+        }
+
         // create a record for each model
         return sails.models[model.toLowerCase()].mongoose.createAsync(fixture)
       })
+
+        // add model to global fixtures
+        .tap(function(records) {
+          global.fixtures[model] = records
+        })
     })
 
-      // find and to global.fixtures
-      .then(function() {
-        return Promise.map(models, function(model) {
-          // find records for each created model
-          return sails.models[model.toLowerCase()].mongoose.findAsync()
-            .tap(function(records) {
-              global.fixtures[model] = records
-            })
-        })
-      })
-      // .tap(() => sails.log(global.fixtures))
-      
       .then(function(result) {
         clear() // clear terminal again
         done(null, sails)

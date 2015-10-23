@@ -53,34 +53,16 @@ describe('Unit Tests', () => {
         _user.should.have.property('__label')
       }
     })
+
+    it('should have discriminators when unit testing', () => {
+      fixtures.should.have.property('userFacebook')
+      fixtures.should.have.property('userTwitter')
+      fixtures.userFacebook.should.be.instanceOf(Array)
+      fixtures.userTwitter.should.be.instanceOf(Array)
+      fixtures.userFacebook.should.not.be.empty
+      fixtures.userTwitter.should.not.be.empty
+    })
   })
-
-
-  /*
-  describe('#databases', () => {
-
-    let user
-    let place
-
-    it('should load user fixtures with waterline', done => {
-      User.find().exec(function(err, results) {
-        results.length.should.be.eql(fixtures['user'].length);
-        results[0].should.have.property('username')
-        done();
-      });
-    })
-
-    it('should load user fixtures with mongoose', done => {
-      User.mongoose.findAsync()
-        .then(results => {
-          results.length.should.be.eql(fixtures['user'].length);
-          results[0].should.have.property('username')
-          done()
-        })
-        .catch(done)
-    })
-  });
-  */
 
 
   describe('#http', () => {

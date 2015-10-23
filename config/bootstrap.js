@@ -9,13 +9,14 @@
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-var Promise = require('bluebird')
-var _ = require('lodash')
-var glob = Promise.promisify(require('glob'))
-var path = require('path')
+var Promise    = require('bluebird')
+var _          = require('lodash')
+var glob       = Promise.promisify(require('glob'))
+var path       = require('path')
 var changeCase = require('change-case')
-var mongoose = require('mongoose')
-var clear = require('cli-clear')
+var mongoose   = require('mongoose')
+var clear      = require('cli-clear')
+var is         = require('is_js')
 Promise.promisifyAll(mongoose.Model);
 Promise.promisifyAll(mongoose.Model.prototype);
 Promise.promisifyAll(mongoose.Query.prototype);
@@ -115,6 +116,15 @@ module.exports.bootstrap = function (cb) {
 
           // append promisifed mongoose model to waterline object
           Model.mongoose = mongooseModel
+          
+          // bind discriminators
+          if (is.array(Model.discriminators) && is.not.empty(Model.discriminators)) {
+            _.each(Model.discriminators, function(d) {
+              // console.log('binding discriminator:', d.name, 'for model', model)
+              Model.mongoose[d.name] = Model.mongoose.discriminator(d.name, d.schema)
+              // console.log('mongoose discriminator bound to:', pascalCaseModelName + '.mongoose.' + d.name)
+            })
+          }
         }) // _.each
     }) // .then
     .catch(console.error)
