@@ -1,11 +1,20 @@
-var ObjectID = require('mongodb').ObjectID
+var id     = require('mongodb').ObjectID
+var _      = require('lodash')
+var should = require('should')
+
+
+// get prop at key with val
+var getVal = function(model, key, val, prop) {
+  // sails.log({model, key, val, prop})
+  return _.find(model, _.matchesProperty(key, val))[prop]
+}
 
 // set var to reference _id from other schemas
 var user = exports.user = [
   {
     __label: 'user1',
     __discriminator: 'Facebook',
-    _id: ObjectID(),
+    _id: id(),
     firstName: "Hello",
     lastName: "World",
     email: "hello@world.com"
@@ -13,7 +22,7 @@ var user = exports.user = [
   {
     __label: 'user2',
     __discriminator: 'Twitter',
-    _id: ObjectID(),
+    _id: id(),
     firstName: "Foo",
     lastName: "Bar",
     email: "foo@bar.com"

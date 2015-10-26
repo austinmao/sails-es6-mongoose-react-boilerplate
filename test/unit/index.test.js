@@ -62,6 +62,17 @@ describe('Unit Tests', () => {
       fixtures.userFacebook.should.not.be.empty
       fixtures.userTwitter.should.not.be.empty
     })
+
+    it('should be able to get fixture by global function', () => {
+      result = fixtures.getVal(fixtures.User, '__label', 'user1', '_id')
+      result.should.exist
+    })
+
+    it('should be able to get value by global function', () => {
+      result = fixtures.getFixture(fixtures.User, '__label', 'user1')
+      result.should.be.instanceOf(Object)
+      result.should.have.property('_id')
+    })
   })
 
 
