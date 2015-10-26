@@ -105,4 +105,20 @@ describe('Unit Tests', () => {
       })
     })
   })
+
+  describe('#polyfills', () => {
+    it('should have asyncawait', done => {
+      function sleep(ms = 0) {
+        return new Promise(r => setTimeout(r, ms));
+      }
+
+      (async () => {
+        console.log('a');
+        await sleep(1000);
+        console.log('b');
+        done()
+      })()
+    })
+  })
+
 })

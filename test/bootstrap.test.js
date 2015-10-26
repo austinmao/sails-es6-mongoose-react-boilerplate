@@ -16,8 +16,9 @@ var _s = require('underscore.string')
 var changeCase = require('change-case')
 var is = require('is_js')
 
-// add babel to global var
-global.babel = require("sails-hook-babel/node_modules/babel/register")();
+require("sails-hook-babel/node_modules/babel/register")({
+  optional: ['es7.asyncFunctions']
+});
 
 
 /** loads the sails server and fixtures */
@@ -56,7 +57,7 @@ before(function (done) {
     return Promise.map(models, function(model) {
 
       // get each record
-      return Promise.map(fixtures[model], function(fixture) {
+      return Promise.each(fixtures[model], function(fixture) {
 
         // create a record for each discriminator
         if (fixture.__discriminator) {
@@ -81,6 +82,24 @@ before(function (done) {
           global.fixtures[model] = records
         })
     })
+
+      // bind fixture finder to global
+      .then(function(result) {
+        // get prop at key with val
+        var getVal = function(model, key, val, prop) {
+          sails.log({model, key, val, prop})
+          return _.find(model, _.matchesProperty(key, val))[prop]
+        }
+
+        // get fixture by key and value
+        var getFixture = function(model, key, val) {
+          sails.log({model, key, val})
+          return _.find(model, _.matchesProperty(key, val))
+        }
+
+        global.fixtures.getVal     = getVal
+        global.fixtures.getFixture = getFixture
+      })
 
       .then(function(result) {
         clear() // clear terminal again
