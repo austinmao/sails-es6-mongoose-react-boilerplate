@@ -16,7 +16,7 @@ var _s = require('underscore.string')
 var changeCase = require('change-case')
 var is = require('is_js')
 
-require("sails-hook-babel/node_modules/babel/register")({
+global.babel = require("sails-hook-babel/node_modules/babel/register")({
   optional: ['es7.asyncFunctions']
 });
 
