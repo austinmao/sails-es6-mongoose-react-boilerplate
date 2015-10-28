@@ -39,3 +39,27 @@ var auth = exports.auth = [
     _user: user[1]._id
   }
 ]
+
+var comment = exports.comment = [
+  {
+    _id: id(),
+    _user: user[0]._id
+  },
+  {
+    _id: id(),
+    _user: user[1]._id
+  }
+]
+
+var post = exports.post = [
+  {
+    _id: id(),
+    _user: user[0]._id,
+    _comments: [comment[0]._id, comment[1]._id]
+  },
+  {
+    _id: id(),
+    _user: user[1]._id,
+    _comments: [comment[0]._id]
+  }
+]

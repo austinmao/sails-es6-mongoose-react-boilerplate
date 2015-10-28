@@ -16,6 +16,9 @@ const failure = chalk.bgRed.black
 const trace = chalk.bgBlue.black
 
 
+let result
+
+
 describe('Unit Tests', () => {
 
   describe('#bootstrap', () => {
@@ -129,6 +132,25 @@ describe('Unit Tests', () => {
         console.log('b');
         done()
       })()
+    })
+  })
+
+  describe.only('#deepPopulate', () => {
+    it('can populate deep nested references', async done => {
+      try {
+        result = await Post.mongoose.findById(fixtures.post[0]._id.toString())
+          .deepPopulate('_comments._user')
+          .execAsync()
+
+        result.should.have.property('_comments')
+        result._comments.should.be.instanceOf(Array)
+        result._comments[0].should.have.property('_id')
+        result._comments[0].should.have.property('_user')
+        result._comments[0]._user.should.have.property('_id')
+        done()
+      } catch(err) {
+        done(err)
+      }
     })
   })
 
