@@ -6,7 +6,6 @@
 */
 
 var Sails = require('sails')
-var Barrels = require('barrels')
 var clear = require('cli-clear')
 var Promise = require('bluebird')
 var sails
@@ -15,6 +14,8 @@ var path = require('path')
 var _s = require('underscore.string')
 var changeCase = require('change-case')
 var is = require('is_js')
+var chai = require('chai')
+var chaiImmutable = require('chai-immutable')
 
 global.babel = require("sails-hook-babel/node_modules/babel/register")({
   optional: ['es7.asyncFunctions']
@@ -43,6 +44,7 @@ before(function (done) {
     // add to global vars for use in testing
     global.sails = sails
     global.app = sails.express ? sails.express.app : sails.hooks.http.app;
+    chai.use(chaiImmutable)
 
     /************************
     *** populate fixtures ***

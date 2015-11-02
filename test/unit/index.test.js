@@ -9,15 +9,11 @@ import request from 'supertest-as-promised'
 const ObjectId = require('mongodb').ObjectID
 import {Clean} from '../helpers/clean'
 
-// color consoles
-import chalk from 'chalk'
-const success = chalk.bgGreen.black
-const failure = chalk.bgRed.black
-const trace = chalk.bgBlue.black
+import {expect} from 'chai'
+import {List, Map} from 'immutable';
 
 
 let result
-
 
 describe('Unit Tests', () => {
 
@@ -135,7 +131,7 @@ describe('Unit Tests', () => {
     })
   })
 
-  describe.only('#deepPopulate', () => {
+  describe('#deepPopulate', () => {
     it('can populate deep nested references', async done => {
       try {
         result = await Post.mongoose.findById(fixtures.post[0]._id.toString())
@@ -153,5 +149,78 @@ describe('Unit Tests', () => {
       }
     })
   })
+
+  describe.only('immutability', () => {
+
+    describe('numbers', () => {
+
+      function increment(currentState) {
+        return currentState + 1;
+      }
+
+      it('are immutable', () => {
+        let state = 42;
+        let nextState = increment(state);
+
+        expect(nextState).to.equal(43);
+        expect(state).to.equal(42);
+      });
+
+    });
+
+    describe('Lists', () => {
+
+      function addMovie(currentState, movie) {
+        return currentState.push(movie);
+      }
+
+      it('are immutable', () => {
+        let state = List.of('Trainspotting', '28 Days Later');
+        let nextState = addMovie(state, 'Sunshine');
+
+        expect(nextState).to.equal(List.of(
+          'Trainspotting',
+          '28 Days Later',
+          'Sunshine'
+        ));
+        expect(state).to.equal(List.of(
+          'Trainspotting',
+          '28 Days Later'
+        ));
+      });
+
+    });
+
+    describe('trees', () => {
+
+      function addMovie(currentState, movie) {
+        return currentState.update('movies', movies => movies.push(movie));
+      }
+
+      it('are immutable', () => {
+        let state = Map({
+          movies: List.of('Trainspotting', '28 Days Later')
+        });
+        let nextState = addMovie(state, 'Sunshine');
+
+        expect(nextState).to.equal(Map({
+          movies: List.of(
+            'Trainspotting',
+            '28 Days Later',
+            'Sunshine'
+          )
+        }));
+        expect(state).to.equal(Map({
+          movies: List.of(
+            'Trainspotting',
+            '28 Days Later'
+          )
+        }));
+      });
+
+    });
+
+  });
+
 
 })

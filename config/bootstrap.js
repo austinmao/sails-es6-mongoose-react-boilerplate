@@ -116,7 +116,7 @@ module.exports.bootstrap = function (cb) {
 
           // append promisifed mongoose model to waterline object
           Model.mongoose = mongooseModel
-          
+
           // bind discriminators
           if (is.array(Model.discriminators) && is.not.empty(Model.discriminators)) {
             _.each(Model.discriminators, function(d) {
@@ -129,19 +129,4 @@ module.exports.bootstrap = function (cb) {
     }) // .then
     .catch(console.error)
   } // bindMongooseToModels
-
-
-  /**
-   * Ensure we have 2dsphere index on Place so GeoSpatial queries can work!
-   * @return {promise} [nativeAsync promise fulfilling ensureIndexAsync]
-   */
-  function ensureMongo2dSphereIndex() {
-
-    Promise.promisifyAll(sails.models.place)
-    return sails.models.place.nativeAsync()
-      .then(Promise.promisifyAll)
-      .then(function(places) {
-        return places.createIndexAsync({ location: '2dsphere' })
-      })
-  } // ensureMongo2dSphereIndex
 };
