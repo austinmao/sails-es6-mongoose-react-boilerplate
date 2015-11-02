@@ -63,12 +63,12 @@ describe('Unit Tests', () => {
     })
 
     it('should be able to get fixture by global function', () => {
-      result = fixtures.getVal(fixtures.User, '__label', 'user1', '_id')
+      result = fixtures.getVal(fixtures.user, '__label', 'user1', '_id')
       result.should.exist
     })
 
     it('should be able to get value by global function', () => {
-      result = fixtures.getFixture(fixtures.User, '__label', 'user1')
+      result = fixtures.getFixture(fixtures.user, '__label', 'user1')
       result.should.be.instanceOf(Object)
       result.should.have.property('_id')
     })
@@ -123,9 +123,7 @@ describe('Unit Tests', () => {
       }
 
       (async () => {
-        console.log('a');
         await sleep(1000);
-        console.log('b');
         done()
       })()
     })
