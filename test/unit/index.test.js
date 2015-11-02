@@ -150,7 +150,7 @@ describe('Unit Tests', () => {
     })
   })
 
-  describe.only('immutability', () => {
+  describe('immutability', () => {
 
     describe('numbers', () => {
 
