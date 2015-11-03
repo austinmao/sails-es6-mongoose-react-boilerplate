@@ -16,9 +16,26 @@ var changeCase = require('change-case')
 var is = require('is_js')
 var chai = require('chai')
 var chaiImmutable = require('chai-immutable')
+var jsdom = require('jsdom')
 
-global.babel = require("sails-hook-babel/node_modules/babel/register")({
-  optional: ['es7.asyncFunctions']
+
+// /** init babel with es7 async-await */
+// global.babel = require('babel-core/register')({
+//   optional: ['es7.asyncFunctions']
+// });
+
+/** bind dom objects to global */
+var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
+var win = doc.defaultView;
+
+global.document = doc;
+global.window = win;
+
+// from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80
+Object.keys(window).forEach((key) => {
+  if (!(key in global)) {
+    global[key] = window[key];
+  }
 });
 
 

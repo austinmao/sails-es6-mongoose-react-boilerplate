@@ -3,5 +3,13 @@
     "node_modules",
     "bower_components"
   ],
-  "presets": ["es2015", "react"]
+  "presets": [
+    "es2015",
+    "react"
+  ],
+  "plugins": [
+    "transform-react-constant-elements",
+    "syntax-async-functions",
+    "transform-regenerator"
+  ]
 }
