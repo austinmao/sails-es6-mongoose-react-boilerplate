@@ -12,6 +12,7 @@ var sails
 var glob = Promise.promisify(require('glob'))
 var path = require('path')
 var _s = require('underscore.string')
+var _ = require('lodash')
 var changeCase = require('change-case')
 var is = require('is_js')
 var chai = require('chai')
@@ -19,10 +20,11 @@ var chaiImmutable = require('chai-immutable')
 var jsdom = require('jsdom')
 
 
-// /** init babel with es7 async-await */
-// global.babel = require('babel-core/register')({
-//   optional: ['es7.asyncFunctions']
-// });
+/**
+init babel with polyfill for regenerator
+@see https://github.com/babel/babel/issues/303
+*/
+global.babel = require("babel-polyfill")
 
 /** bind dom objects to global */
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
@@ -54,6 +56,8 @@ before(function (done) {
       console.error('failed to lift sails')
       return done(err)
     };
+
+    var localAppURL
 
     sails = server;
     sails.localAppURL = localAppURL = ( sails.usingSSL ? 'https' : 'http' ) + '://' + sails.config.host + ':' + sails.config.port + '';
