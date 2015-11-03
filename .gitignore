@@ -28,3 +28,4 @@ node_modules
 
 # Tmp files
 .tmp
+assets/js/bundle.js
