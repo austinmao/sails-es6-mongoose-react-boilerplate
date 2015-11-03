@@ -8,7 +8,6 @@
 var Sails = require('sails')
 var clear = require('cli-clear')
 var Promise = require('bluebird')
-var sails
 var glob = Promise.promisify(require('glob'))
 var path = require('path')
 var _s = require('underscore.string')
@@ -19,6 +18,7 @@ var chai = require('chai')
 var chaiImmutable = require('chai-immutable')
 var jsdom = require('jsdom')
 
+var sails
 
 /**
 init babel with polyfill for regenerator
@@ -39,6 +39,9 @@ Object.keys(window).forEach((key) => {
     global[key] = window[key];
   }
 });
+
+// allow chai to test immutablejs objects
+chai.use(chaiImmutable)
 
 
 /** loads the sails server and fixtures */
@@ -65,7 +68,6 @@ before(function (done) {
     // add to global vars for use in testing
     global.sails = sails
     global.app = sails.express ? sails.express.app : sails.hooks.http.app;
-    chai.use(chaiImmutable)
 
     /************************
     *** populate fixtures ***

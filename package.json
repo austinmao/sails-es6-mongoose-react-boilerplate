@@ -8,7 +8,7 @@
     "start": "nodemon app.js",
     "debug": "nodemon debug app.js",
     "test": "PORT=9999 NODE_ENV=testing mocha --compilers js:babel-core/register ./test/bootstrap.test.js ./test/unit/*.test.js ./test/unit/**/*.test.js -r should --timeout 4000",
-    "test-front-end": "PORT=9999 NODE_ENV=testing mocha --compilers js:babel-core/register ./test/bootstrap.test.js ./test/unit/*.test.js ./test/unit/**/*.test.js -r should --timeout 4000",
+    "test-front-end": "PORT=9999 NODE_ENV=testing mocha --compilers js:babel-core/register ./test/bootstrap.test.js ./test/unit/react/*.test.js 'test/unit/react/**/*.test.@(js|jsx)' -r should --timeout 4000",
     "functional": "PORT=6969 NODE_ENV=functional _mocha ./test/functional.test.js ./test/functional/*.test.js ./test/functional/**/*.test.js -r should --timeout 7200000"
   },
   "dependencies": {

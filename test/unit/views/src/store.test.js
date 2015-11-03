@@ -1,7 +1,7 @@
 import {Map, fromJS} from 'immutable';
 import {expect} from 'chai';
 
-import makeStore from '../../../views/src/store';
+import makeStore from '../../../../views/src/store';
 
 describe('store', () => {
 

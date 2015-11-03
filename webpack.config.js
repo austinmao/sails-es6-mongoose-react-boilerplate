@@ -6,7 +6,7 @@ module.exports = {
     // 'webpack-dev-server/client?http://localhost:8080',
     // 'webpack/hot/only-dev-server',
     // './assets/src/index.jsx'
-    './assets/src/index.jsx'
+    './api/react/index.jsx'
   ],
   resolveLoader: {
     fallback: [path.join(__dirname, 'node_modules')],
