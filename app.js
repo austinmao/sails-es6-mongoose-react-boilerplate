@@ -53,6 +53,9 @@ process.chdir(__dirname);
     }
   }
 
+  // polyfill with babel
+  require("babel-core/register");
+
   // Start server
   sails.lift(rc('sails'));
 })();

@@ -15,7 +15,7 @@
 
 module.exports.babel = {
   // compile: true,
-  stage: 2,
+  // stage: 2,
   // loose: true,
   // ignore: false,
   // only: '',

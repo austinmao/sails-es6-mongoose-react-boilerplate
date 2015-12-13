@@ -5,21 +5,45 @@
 * @docs        :: http://sailsjs-documentation.readthedocs.org/en/latest/concepts/Testing/
 */
 
+
+/**
+init babel with polyfill for regenerator
+NOTE: this needs to be first
+@see https://github.com/babel/babel/issues/303
+*/
+require("babel-polyfill");
+
 var Sails = require('sails')
 var clear = require('cli-clear')
 var Promise = require('bluebird')
-var sails
 var glob = Promise.promisify(require('glob'))
 var path = require('path')
 var _s = require('underscore.string')
+var _ = require('lodash')
 var changeCase = require('change-case')
 var is = require('is_js')
 var chai = require('chai')
 var chaiImmutable = require('chai-immutable')
+var jsdom = require('jsdom')
 
-global.babel = require("sails-hook-babel/node_modules/babel/register")({
-  optional: ['es7.asyncFunctions']
+var sails
+
+/** bind dom objects to global */
+var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
+var win = doc.defaultView;
+
+global.document = doc;
+global.window = win;
+
+// from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80
+Object.keys(window).forEach((key) => {
+  if (!(key in global)) {
+    global[key] = window[key];
+  }
 });
+
+// allow chai to test immutablejs objects
+chai.use(chaiImmutable)
 
 
 /** loads the sails server and fixtures */
@@ -38,13 +62,14 @@ before(function (done) {
       return done(err)
     };
 
+    var localAppURL
+
     sails = server;
     sails.localAppURL = localAppURL = ( sails.usingSSL ? 'https' : 'http' ) + '://' + sails.config.host + ':' + sails.config.port + '';
 
     // add to global vars for use in testing
     global.sails = sails
     global.app = sails.express ? sails.express.app : sails.hooks.http.app;
-    chai.use(chaiImmutable)
 
     /************************
     *** populate fixtures ***
