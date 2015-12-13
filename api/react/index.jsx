@@ -12,9 +12,7 @@ import App from './components/App';
 import {VotingContainer} from './components/Voting';
 import {ResultsContainer} from './components/Results';
 
-// require('../styles/style.css');
-
-const socket = io(`${location.protocol}//${location.hostname}:8090`);
+const socket = io(`${location.protocol}//${location.hostname}:1337`);
 socket.on('state', state =>
   store.dispatch(setState(state))
 );
