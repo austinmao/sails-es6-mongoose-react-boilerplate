@@ -5,6 +5,14 @@
 * @docs        :: http://sailsjs-documentation.readthedocs.org/en/latest/concepts/Testing/
 */
 
+
+/**
+init babel with polyfill for regenerator
+NOTE: this needs to be first
+@see https://github.com/babel/babel/issues/303
+*/
+require("babel-polyfill");
+
 var Sails = require('sails')
 var clear = require('cli-clear')
 var Promise = require('bluebird')
@@ -19,12 +27,6 @@ var chaiImmutable = require('chai-immutable')
 var jsdom = require('jsdom')
 
 var sails
-
-/**
-init babel with polyfill for regenerator
-@see https://github.com/babel/babel/issues/303
-*/
-global.babel = require("babel-polyfill")
 
 /** bind dom objects to global */
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
